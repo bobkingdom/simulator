@@ -1,0 +1,26 @@
+# Render 部署配置文件
+# 文档: https://render.com/docs/blueprint-spec
+
+services:
+  # Web 服务配置
+  - type: web
+    name: email-validator-api
+    runtime: python
+    region: singapore  # 新加坡节点，亚洲访问更快
+
+    # 构建配置
+    buildCommand: pip install -r requirements.txt
+
+    # 启动命令
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+
+    # 免费实例
+    plan: free
+
+    # 健康检查路径
+    healthCheckPath: /api/v1/health
+
+    # 环境变量（可选）
+    envVars:
+      - key: PYTHON_VERSION
+        value: "3.11"
