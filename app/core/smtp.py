@@ -3,8 +3,7 @@ SMTP验证器
 通过SMTP协议验证邮箱是否存在（不发送实际邮件）
 """
 import asyncio
-import socket
-from typing import Optional, Tuple
+from typing import Optional
 import aiosmtplib
 from aiosmtplib import SMTP, SMTPException
 from app.models.schemas import SMTPResult
@@ -94,9 +93,8 @@ class SMTPValidator:
                 await smtp.connect()
                 result.connectable = True
 
-                # 发送 EHLO
-                hostname = socket.getfqdn()
-                await smtp.ehlo(hostname)
+                # 发送 EHLO (aiosmtplib自动使用本机hostname)
+                await smtp.ehlo()
 
                 # 发送 MAIL FROM
                 code, message = await smtp.execute_command(
